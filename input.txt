@@ -1,0 +1,23 @@
+move
+left
+right
+place 0,0,
+place
+place 0,9,south
+place -2,0,north
+move
+report
+place 0,0,east
+move
+move
+right
+move
+right
+move
+report
+right
+move
+move
+right
+move
+report
