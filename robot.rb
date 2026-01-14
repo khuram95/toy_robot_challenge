@@ -1,7 +1,8 @@
 class Robot
 
-  DIRECTIONS = %w[EAST SOUTH WEST NORTH]
+  DIRECTIONS = %w[EAST SOUTH WEST NORTH].freeze
   TABLE_SIZE = 5
+
   attr_reader :x_position, :y_position, :direction
 
   def initialize
@@ -10,7 +11,7 @@ class Robot
 
   def execute(command)
     command = normalize(command)
-    case command.strip.upcase
+    case command.upcase
     when /^PLACE\s+(\d+),(\d+),(NORTH|EAST|SOUTH|WEST)$/
         place($1.to_i, $2.to_i, $3)
     when 'MOVE'
@@ -26,6 +27,7 @@ class Robot
 
   def place(x, y, direction)
     return if ignore?(x, y)
+
     @x_position = x
     @y_position = y
     @direction = direction
@@ -60,6 +62,7 @@ class Robot
 
   def report
     return if ignore?
+
     puts "*"*30
     puts "OUTPUT: #{@x_position},#{@y_position},#{@direction}\n"
     puts "*"*30
@@ -84,6 +87,7 @@ end
 if __FILE__ == $PROGRAM_NAME
   puts "Enter commands:"
   robot = Robot.new
+  
   if ARGV[0]
     File.readlines(ARGV[0]).each do |line|
       robot.execute(line.strip)
