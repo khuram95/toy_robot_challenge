@@ -1,5 +1,40 @@
 # Toy Robot Simulator
 
+## Usage
+
+### Running the Robot Simulator
+
+#### Option 1: Run with an input file
+```bash
+ruby robot.rb input.txt
+```
+
+#### Option 2: Run interactively (enter commands manually)
+```bash
+ruby robot.rb
+```
+Then type commands one per line. Press `Ctrl+D` (or `Ctrl+Z` on Windows) to exit.
+
+#### Option 3: Pipe commands via stdin
+```bash
+echo -e "PLACE 0,0,NORTH\nMOVE\nREPORT" | ruby robot.rb
+```
+
+### Sample Commands
+```
+PLACE 0,0,NORTH
+MOVE
+LEFT
+RIGHT
+REPORT
+```
+
+### Running Tests
+
+```bash
+ruby robot_test.rb
+```
+
 ## Description
 
 The task is to create a simulation of a toy robot moving on a square tabletop of dimensions 5 units x 5 units.
