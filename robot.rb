@@ -2,18 +2,22 @@ class Robot
 
   DIRECTIONS = %w[EAST SOUTH WEST NORTH].freeze
   TABLE_SIZE = 5
+  MOVEMENTS = DIRECTIONS.zip([
+    [1, 0],   # EAST
+    [0, -1],  # SOUTH
+    [-1, 0],  # WEST
+    [0, 1]    # NORTH
+  ]).to_h.freeze
+  PLACE_PATTERN = /^PLACE\s+(?<x>\d+),(?<y>\d+),(?<direction>#{DIRECTIONS.join('|')})$/.freeze
+  private_constant :DIRECTIONS, :TABLE_SIZE, :MOVEMENTS, :PLACE_PATTERN
 
   attr_reader :x_position, :y_position, :direction
-
-  def initialize
-    @x_position = @y_position = @direction = nil
-  end
 
   def execute(command)
     command = normalize(command)
     case command.upcase
-    when /^PLACE\s+(\d+),(\d+),(NORTH|EAST|SOUTH|WEST)$/
-        place($1.to_i, $2.to_i, $3)
+    when PLACE_PATTERN
+        place($~[:x].to_i, $~[:y].to_i, $~[:direction])
     when 'MOVE'
       move
     when 'LEFT'
@@ -22,6 +26,8 @@ class Robot
       change_direction(1)
     when 'REPORT'
       report
+    else
+      puts "Invalid command: #{command}"
     end
   end
 
@@ -37,12 +43,7 @@ class Robot
   def move
     return if ignore?
 
-    tmp_x, tmp_y = {
-      'EAST' => [1, 0],
-      'WEST' => [-1, 0],
-      'NORTH' => [0, 1],
-      'SOUTH' => [0, -1]
-    }[@direction]
+    tmp_x, tmp_y = MOVEMENTS[@direction]
 
     return if ignore?(@x_position + tmp_x, @y_position + tmp_y)
 
@@ -87,7 +88,7 @@ end
 if __FILE__ == $PROGRAM_NAME
   puts "Enter commands:"
   robot = Robot.new
-  
+
   if ARGV[0]
     File.readlines(ARGV[0]).each do |line|
       robot.execute(line.strip)
