@@ -38,7 +38,7 @@ class Robot
   private
 
   def place(x, y, direction)
-    return if out_of_bounds?(x, y)
+    return if out_of_bounds?(x, y) || !DIRECTIONS.include?(direction)
 
     @x_position = x
     @y_position = y
@@ -59,11 +59,11 @@ class Robot
     puts "Moved to #{@x_position},#{@y_position}"
   end
 
-  def change_direction(new_index)
+  def change_direction(new_facing_index)
     return unless placed?
 
     current_facing_index = DIRECTIONS.index(@direction)
-    @direction = DIRECTIONS[(current_facing_index + new_index) % DIRECTIONS.length]
+    @direction = DIRECTIONS[(current_facing_index + new_facing_index) % DIRECTIONS.length]
     puts "Changed direction to #{@direction}"
   end
 
