@@ -1,0 +1,18 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4
+
+# Allow short parameter names for coordinates (x, y are common)
+Naming/MethodParameterName:
+  MinNameLength: 2
+  AllowedNames:
+    - x
+    - y
+
+# Allow longer methods for command processing
+Metrics/MethodLength:
+  Max: 15
+
+# Allow assignment in condition for common Ruby patterns
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: true
