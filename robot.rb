@@ -35,6 +35,8 @@ class Robot
     end
   end
 
+  private
+
   def place(x, y, direction)
     return if out_of_bounds?(x, y)
 
@@ -72,8 +74,6 @@ class Robot
     puts "OUTPUT: #{@x_position},#{@y_position},#{@direction}\n"
     puts '*' * 30
   end
-
-  private
 
   # Check if the robot is placed on the table (not nil)
   def placed?
