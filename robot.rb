@@ -36,7 +36,7 @@ class Robot
   end
 
   def place(x, y, direction)
-    return if ignore?(x, y)
+    return if out_of_bounds?(x, y)
 
     @x_position = x
     @y_position = y
@@ -45,11 +45,11 @@ class Robot
   end
 
   def move
-    return if ignore?
+    return unless placed?
 
     tmp_x, tmp_y = MOVEMENTS[@direction]
 
-    return if ignore?(@x_position + tmp_x, @y_position + tmp_y)
+    return if out_of_bounds?(@x_position + tmp_x, @y_position + tmp_y)
 
     @x_position += tmp_x
     @y_position += tmp_y
@@ -58,7 +58,7 @@ class Robot
   end
 
   def change_direction(new_index)
-    return if ignore?
+    return unless placed?
 
     current_facing_index = DIRECTIONS.index(@direction)
     @direction = DIRECTIONS[(current_facing_index + new_index) % DIRECTIONS.length]
@@ -66,7 +66,7 @@ class Robot
   end
 
   def report
-    return if ignore?
+    return unless placed?
 
     puts '*' * 30
     puts "OUTPUT: #{@x_position},#{@y_position},#{@direction}\n"
@@ -75,18 +75,18 @@ class Robot
 
   private
 
-  # Ignore if the position is out of bounds
-  def ignore?(x = @x_position, y = @y_position)
-    return true if x.nil? || y.nil?
+  # Check if the robot is placed on the table (not nil)
+  def placed?
+    !@x_position.nil? && !@y_position.nil? && !@direction.nil?
+  end
 
-    (x.negative? || x >= TABLE_SIZE) || (y.negative? || y >= TABLE_SIZE)
+  # Check if the position is out of bounds
+  def out_of_bounds?(x, y)
+    x.negative? || x >= TABLE_SIZE || y.negative? || y >= TABLE_SIZE
   end
 
   def normalize(command)
-    command
-      .strip
-      .gsub(/\s+/, ' ')      # collapse multiple spaces
-      .gsub(/\s*,\s*/, ',')  # remove spaces around commas
+    command.strip.gsub(/(\s*,\s*)|(\s+)/) { |match| match.include?(',') ? ',' : ' ' }
   end
 end
 
